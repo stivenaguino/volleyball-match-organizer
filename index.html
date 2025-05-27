@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+      <title>Organizador de Voleibol Pro</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <script>
+         tailwind.config = {
+            theme: {
+               extend: {
+                  animation: {
+                     'bounce-slow': 'bounce 3s infinite',
+                     'pulse-slow': 'pulse 3s infinite',
+                     'fade-in': 'fadeIn 0.5s ease-in-out',
+                     'slide-up': 'slideUp 0.3s ease-out'
+                  },
+                  keyframes: {
+                     fadeIn: {
+                        '0%': { opacity: '0', transform: 'translateY(10px)' },
+                        '100%': { opacity: '1', transform: 'translateY(0)' }
+                     },
+                     slideUp: {
+                        '0%': { opacity: '0', transform: 'translateY(20px)' },
+                        '100%': { opacity: '1', transform: 'translateY(0)' }
+                     }
+                  }
+               }
+            }
+         }
+      </script>
+      <link rel="stylesheet" href="style.css" />
+   </head>
+   <body class="bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 min-h-screen">
+      <!-- Header con gradiente -->
+      <div class="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 shadow-lg">
+         <div class="max-w-4xl mx-auto">
+            <h1 class="text-2xl md:text-3xl font-bold text-center flex items-center justify-center gap-2">
+               🏐 <span class="animate-pulse">Organizador de Voleibol Pro</span>
+            </h1>
+            <p class="text-center text-purple-100 mt-2 text-sm">Miguelo's Volley Club</p>
+         </div>
+      </div>
+
+      <div class="max-w-4xl mx-auto p-4 space-y-6">
+         <!-- Estado del torneo -->
+         <div id="estadoTorneo" class="glass-effect rounded-xl p-4 shadow-lg border border-white/20 hidden">
+            <div class="flex items-center justify-between">
+               <div class="flex items-center gap-3">
+                  <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                  <span class="font-semibold text-gray-700">Torneo Activo</span>
+               </div>
+               <div class="text-sm text-gray-600" id="tiempoTorneo">Iniciado: --</div>
+            </div>
+         </div>
+
+         <!-- Ingreso de equipos -->
+         <div class="glass-effect rounded-xl p-6 shadow-lg border border-white/20 animate-fade-in">
+            <div class="flex items-center gap-3 mb-4">
+               <div class="p-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                  </svg>
+               </div>
+               <label for="inputDetallado" class="text-lg font-semibold text-gray-700"> Configurar Equipos </label>
+            </div>
+
+            <div class="mb-4">
+               <textarea
+                  id="inputDetallado"
+                  class="w-full h-40 p-4 border-2 border-gray-200 rounded-lg font-mono text-sm focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all resize-none"
+                  placeholder="Equipo 1&#10;Miguel Angel&#10;Erika&#10;Stiven&#10;Alejandro&#10;&#10;Equipo 2&#10;Duvan&#10;Juan José&#10;Esteban&#10;Maria Jose&#10;&#10;Equipo 3&#10;..."></textarea>
+            </div>
+
+            <!-- Botones principales -->
+            <div class="space-y-3">
+               <div class="flex flex-col sm:flex-row gap-3">
+                  <button
+                     id="btnIniciar"
+                     onclick="iniciarTorneo()"
+                     class="flex-1 button-primary text-white px-6 py-4 rounded-lg text-lg font-semibold shadow-lg transition-all duration-300">
+                     <span class="flex items-center justify-center gap-2"> 🚀 <span>Iniciar Torneo</span> </span>
+                  </button>
+                  <button
+                     id="btnRotar"
+                     onclick="rotarEquipos()"
+                     class="flex-1 button-success px-6 py-4 rounded-lg text-lg font-semibold shadow-lg hidden transition-all duration-300">
+                     <span class="flex items-center justify-center gap-2"> ➡️ <span>Siguiente Rotación</span> </span>
+                  </button>
+               </div>
+
+               <!-- Botones secundarios -->
+               <div class="flex flex-col sm:flex-row gap-2">
+                  <button
+                     id="btnGuardar"
+                     onclick="guardarTorneo()"
+                     class="flex-1 bg-amber-500 text-white px-4 py-3 rounded-lg text-sm font-medium shadow-md hidden hover:bg-amber-600 transition-all">
+                     💾 Guardar Progreso
+                  </button>
+                  <button
+                     id="btnCargar"
+                     onclick="cargarTorneo()"
+                     class="flex-1 bg-cyan-500 text-white px-4 py-3 rounded-lg text-sm font-medium shadow-md hover:bg-cyan-600 transition-all">
+                     📂 Recuperar Torneo
+                  </button>
+                  <button
+                     onclick="confirmarReinicio()"
+                     class="flex-1 button-danger px-4 py-3 rounded-lg text-sm font-medium shadow-md transition-all">
+                     🗑️ Nuevo Torneo
+                  </button>
+               </div>
+            </div>
+
+            <div id="contador" class="text-center text-gray-700 text-lg mt-4 font-semibold"></div>
+            <div id="mensajes" class="text-center text-sm mt-3 p-3 rounded-lg transition-all duration-300"></div>
+         </div>
+
+         <!-- Estadísticas -->
+         <div
+            id="estadisticas"
+            class="glass-effect rounded-xl p-6 shadow-lg border border-white/20 hidden animate-slide-up">
+            <div class="flex items-center gap-3 mb-4">
+               <div class="p-2 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                  </svg>
+               </div>
+               <h3 class="text-xl font-bold text-gray-800">Estadísticas del Torneo</h3>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+               <div class="bg-gradient-to-br from-blue-50 to-blue-100 p-4 rounded-lg border border-blue-200">
+                  <div class="text-xs font-medium text-blue-600 uppercase tracking-wide">Total Posibles</div>
+                  <div class="text-2xl font-bold text-blue-800 mt-1" id="totalPosibles">--</div>
+               </div>
+               <div class="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg border border-green-200">
+                  <div class="text-xs font-medium text-green-600 uppercase tracking-wide">Completados</div>
+                  <div class="text-2xl font-bold text-green-800 mt-1" id="completados">--</div>
+               </div>
+               <div class="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg border border-purple-200">
+                  <div class="text-xs font-medium text-purple-600 uppercase tracking-wide">Progreso</div>
+                  <div class="text-2xl font-bold text-purple-800 mt-1"><span id="progreso">--</span>%</div>
+               </div>
+            </div>
+         </div>
+
+         <!-- Matriz de enfrentamientos -->
+         <div
+            id="matrizContainer"
+            class="glass-effect rounded-xl p-6 shadow-lg border border-white/20 hidden animate-slide-up">
+            <div class="flex items-center gap-3 mb-4">
+               <div class="p-2 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg">
+                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2-2h2a2 2 0 012 2"></path>
+                  </svg>
+               </div>
+               <h3 class="text-xl font-bold text-gray-800">Matriz de Enfrentamientos</h3>
+            </div>
+
+            <div class="flex flex-wrap gap-2 mb-4 text-xs">
+               <div class="flex items-center gap-1">
+                  <div class="w-3 h-3 bg-red-200 border rounded"></div>
+                  <span class="text-gray-600">Sin enfrentar</span>
+               </div>
+               <div class="flex items-center gap-1">
+                  <div class="w-3 h-3 bg-yellow-200 border rounded"></div>
+                  <span class="text-gray-600">1 vez</span>
+               </div>
+               <div class="flex items-center gap-1">
+                  <div class="w-3 h-3 bg-green-200 border rounded"></div>
+                  <span class="text-gray-600">Múltiples</span>
+               </div>
+            </div>
+
+            <div id="matriz" class="overflow-auto rounded-lg border border-gray-200"></div>
+         </div>
+
+         <!-- Canchas -->
+         <div id="canchas" class="space-y-6"></div>
+      </div>
+
+      <!-- Modal de confirmación -->
+      <div
+         id="modalConfirmacion"
+         class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+         <div class="bg-white rounded-xl p-6 max-w-sm w-full shadow-2xl animate-fade-in">
+            <div class="text-center">
+               <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mb-4">
+                  <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16c-.77.833.192 2.5 1.732 2.5z"></path>
+                  </svg>
+               </div>
+               <h3 class="text-lg font-semibold text-gray-900 mb-2">¿Confirmar acción?</h3>
+               <p id="mensajeModal" class="text-sm text-gray-600 mb-6"></p>
+               <div class="flex gap-3">
+                  <button
+                     id="btnCancelar"
+                     class="flex-1 bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-400 transition-colors">
+                     Cancelar
+                  </button>
+                  <button
+                     id="btnConfirmar"
+                     class="flex-1 bg-red-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-600 transition-colors">
+                     Confirmar
+                  </button>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <script src="script.js"></script>
+   </body>
+</html>

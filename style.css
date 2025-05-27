@@ -1,0 +1,68 @@
+/* Estilos adicionales para móvil */
+body {
+   -webkit-tap-highlight-color: transparent;
+   -webkit-touch-callout: none;
+   -webkit-user-select: none;
+   user-select: none;
+}
+
+.glass-effect {
+   backdrop-filter: blur(10px);
+   background: rgba(255, 255, 255, 0.9);
+}
+
+.card-hover {
+   transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+   transform: translateY(-2px);
+   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.team-card {
+   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+   color: white;
+}
+
+.court-gradient {
+   background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.button-primary {
+   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+   transition: all 0.3s ease;
+}
+
+.button-primary:hover {
+   transform: translateY(-1px);
+   box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+}
+
+.button-success {
+   background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+   color: #065f46;
+}
+
+.button-danger {
+   background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+   color: #7f1d1d;
+}
+
+.pulse-ring {
+   animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+@keyframes pulse-ring {
+   0% {
+      transform: scale(0.33);
+   }
+   40%,
+   50% {
+      opacity: 1;
+   }
+   100% {
+      opacity: 0;
+      transform: scale(1.3);
+   }
+}
